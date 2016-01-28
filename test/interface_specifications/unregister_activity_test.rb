@@ -1,29 +1,41 @@
 require_relative '../test_helper'
 
 module ActivityPermissionEngine
-  describe 'ActivityPermissionEngine.unregister_activity(RegisterActivity::Request)' do
-    describe 'RegisterActivity::Request#new(activity_ref)' do
+  describe 'ActivityPermissionEngine.unregister_activity(UnregisterActivity::Request)' do
+    let(:activity_ref) { 'foo' }
+    let(:succeed) { true }
+    let(:activities_registry) { Minitest::Mock.new.expect(:del, succeed, [activity_ref]) }
+    let(:request) { UnregisterActivity::Request.new(activity_ref) }
+
+    subject { ActivityPermissionEngine.unregister_activity(request).call }
+
+    before(:each) do
+      ActivityPermissionEngine.configuration.activities_registry = activities_registry
+    end
+
+    describe 'UnregisterActivity::Request#new(activity_ref)' do
       it 'require activity_ref string as parameter' do
-        skip 'pending'
+        -> { UnregisterActivity::Request.new }.must_raise ArgumentError
       end
     end
 
-    it 'returns RegisterActivity::Response' do
-      skip 'pending'
+    it 'returns UnregisterActivity::Response' do
+      subject.must_be_kind_of UnregisterActivity::Response
     end
 
-    describe 'when registration succeed' do
+    describe 'when succeed' do
       describe 'UnregisterActivity::Response#success?' do
         it 'returns true' do
-          skip 'pending'
+          subject.success?.must_equal true
         end
       end
     end
 
-    describe 'when registration fail' do
-      describe 'RegisterActivity::Response#success?' do
+    describe 'when fail' do
+      let(:succeed) { false }
+      describe 'UnregisterActivity::Response#success?' do
         it 'returns false' do
-          skip 'pending'
+          subject.success?.must_equal false
         end
       end
     end
