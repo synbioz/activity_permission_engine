@@ -31,7 +31,7 @@ module ActivityPermissionEngine
     describe 'when registration succeed' do
       describe 'RegisterActivity::Response#success?' do
         it 'returns true' do
-          subject.success?.must_be true
+          subject.success?.must_equal true
         end
       end
     end
@@ -40,7 +40,7 @@ module ActivityPermissionEngine
       let(:succeed) { false }
       describe 'RegisterActivity::Response#success?' do
         it 'returns false' do
-          subject.success?.must_be false
+          subject.success?.must_equal false
         end
       end
     end
