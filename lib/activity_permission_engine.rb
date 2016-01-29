@@ -2,6 +2,7 @@ require_relative 'activity_permission_engine/version'
 require_relative 'activity_permission_engine/register_activity'
 require_relative 'activity_permission_engine/list_activities'
 require_relative 'activity_permission_engine/unregister_activity'
+require_relative 'activity_permission_engine/allow_activity'
 
 module ActivityPermissionEngine
   class << self
@@ -26,6 +27,10 @@ module ActivityPermissionEngine
 
   def self.unregister_activity(request)
     UnregisterActivity.new(request, self.configuration.activities_registry)
+  end
+
+  def self.allow_activity(request)
+    AllowActivity.new(request, self.configuration.activities_registry)
   end
 
   class Configuration
