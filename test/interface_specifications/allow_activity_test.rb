@@ -12,7 +12,7 @@ describe 'ActivityPermissionEngine.allow_activity(allow_activity_request)' do
     ActivityPermissionEngine.configuration.activities_registry = activities_registry
   end
 
-  subject { ActivityPermissionEngine.allow_activity(request).call }
+  subject { ActivityPermissionEngine.allow_activity(request) }
 
   describe 'it require an AllowActivity::Request as parameter' do
     describe 'AllowActivity::Request#new(activity_ref, role_ref)' do

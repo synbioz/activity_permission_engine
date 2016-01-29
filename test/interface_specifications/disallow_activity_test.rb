@@ -1,26 +1,33 @@
 require_relative '../test_helper'
 
-describe 'ActivityPermissionEngine.disallow_activity(allow_activity_request)' do
-  describe 'it require an DisallowActivity::Request as parameter' do
-    describe 'DisallowActivity::Request#new(activity_ref, role_ref)' do
-      it 'require an activity_ref string' do
-        skip 'pending'
-      end
+module ActivityPermissionEngine
+  describe 'ActivityPermissionEngine.disallow_activity(disallow_activity_request)' do
+    let(:activity_ref) { 'activity_ref' }
+    let(:role_ref) { 'role_ref' }
+    let(:request) { DisallowActivity::Request.new(activity_ref, role_ref) }
+    let(:activities_registry) { Minitest::Mock.new.expect(:remove_role,true, [activity_ref, role_ref]) }
 
-      it 'require a role_ref string' do
-        skip 'pending'
+    subject { ActivityPermissionEngine.disallow_activity(request) }
+
+    before(:each) { ActivityPermissionEngine.configuration.activities_registry = activities_registry }
+
+    describe 'it require a DisallowActivity::Request as parameter' do
+      describe 'DisallowActivity::Request#new(activity_ref, role_ref)' do
+        it 'require an activity_ref and role string' do
+          -> { DisallowActivity::Request.new('') }.must_raise ArgumentError
+        end
       end
     end
-  end
 
-  it 'returns DisallowActivity::Response' do
-    skip 'pending'
-  end
+    it 'returns DisallowActivity::Response' do
+      subject.must_be_kind_of DisallowActivity::Response
+    end
 
-  describe 'when succeed' do
-    describe 'DisallowActivity::Response#success?' do
-      it 'returns true' do
-        skip 'pending'
+    describe 'when succeed' do
+      describe 'DisallowActivity::Response#success?' do
+        it 'returns true' do
+          subject.success?.must_equal true
+        end
       end
     end
   end
