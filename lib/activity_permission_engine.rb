@@ -4,6 +4,7 @@ require_relative 'activity_permission_engine/list_activities'
 require_relative 'activity_permission_engine/unregister_activity'
 require_relative 'activity_permission_engine/allow_activity'
 require_relative 'activity_permission_engine/disallow_activity'
+require_relative 'activity_permission_engine/check_authorization'
 
 module ActivityPermissionEngine
   class << self
@@ -36,6 +37,10 @@ module ActivityPermissionEngine
 
   def self.disallow_activity(request)
     DisallowActivity.new(request, self.configuration.activities_registry).call
+  end
+
+  def self.check_authorization(request)
+    CheckAuthorization.new(request, self.configuration.activities_registry).call
   end
 
   class Configuration
