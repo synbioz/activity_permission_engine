@@ -5,11 +5,13 @@ module ActivityPermissionEngine
     let(:activity_ref) { 'activity_ref' }
     let(:role_ref) { 'role_ref' }
     let(:request) { DisallowActivity::Request.new(activity_ref, role_ref) }
-    let(:activities_registry) { Minitest::Mock.new.expect(:remove_role,true, [activity_ref, role_ref]) }
+    let(:activity_permissions_registry) { Minitest::Mock.new.expect(:remove_role,true, [activity_ref, role_ref]) }
 
     subject { ActivityPermissionEngine.disallow_activity(request) }
 
-    before(:each) { ActivityPermissionEngine.configuration.activities_registry = activities_registry }
+    before(:each) do
+      ActivityPermissionEngine.configuration.activity_permissions_registry = activity_permissions_registry
+    end
 
     describe 'it require a DisallowActivity::Request as parameter' do
       describe 'DisallowActivity::Request#new(activity_ref, role_ref)' do

@@ -5,11 +5,11 @@ describe 'ActivityPermissionEngine.allow_activity(allow_activity_request)' do
   let(:succeed) { true }
   let(:activity_ref) { 'foo' }
   let(:role_ref) { 'bar' }
-  let(:activities_registry) { Minitest::Mock.new.expect(:add_role, succeed, [activity_ref, role_ref]) }
+  let(:activity_permissions_registry) { Minitest::Mock.new.expect(:add_role, succeed, [activity_ref, role_ref]) }
   let(:request) { AllowActivity::Request.new(activity_ref, role_ref) }
 
   before(:each) do
-    ActivityPermissionEngine.configuration.activities_registry = activities_registry
+    ActivityPermissionEngine.configuration.activity_permissions_registry = activity_permissions_registry
   end
 
   subject { ActivityPermissionEngine.allow_activity(request) }

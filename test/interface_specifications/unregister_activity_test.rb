@@ -4,13 +4,13 @@ module ActivityPermissionEngine
   describe 'ActivityPermissionEngine.unregister_activity(UnregisterActivity::Request)' do
     let(:activity_ref) { 'foo' }
     let(:succeed) { true }
-    let(:activities_registry) { Minitest::Mock.new.expect(:del, succeed, [activity_ref]) }
+    let(:activity_permissions_registry) { Minitest::Mock.new.expect(:del, succeed, [activity_ref]) }
     let(:request) { UnregisterActivity::Request.new(activity_ref) }
 
     subject { ActivityPermissionEngine.unregister_activity(request) }
 
     before(:each) do
-      ActivityPermissionEngine.configuration.activities_registry = activities_registry
+      ActivityPermissionEngine.configuration.activity_permissions_registry = activity_permissions_registry
     end
 
     describe 'UnregisterActivity::Request#new(activity_ref)' do

@@ -7,7 +7,7 @@ module ActivityPermissionEngine
 
 
     def call
-      Response.new(@activities_registry.add_role(request.activity_ref, request.role_ref))
+      Response.new(activities_registry.add_role(request.activity_ref, request.role_ref))
     end
 
     private

@@ -1,19 +1,19 @@
 require_relative '../../test_helper'
-require_relative '../../../lib/activity_permission_engine/adapters/activities_registry/memory'
+require_relative '../../../lib/activity_permission_engine/adapters/activity_permissions_registry/memory'
 
 module ActivityPermissionEngine
-  describe Adapters::ActivitiesRegistry::Memory do
+  describe Adapters::ActivityPermissionsRegistry::Memory do
     let(:activity_ref) { 'example:activity_ref' }
     let(:role_refs) { %w(foo bar) }
     let(:store) { { activity_ref => role_refs} }
-    let(:registry) { Adapters::ActivitiesRegistry::Memory.new(store) }
+    let(:registry) { Adapters::ActivityPermissionsRegistry::Memory.new(store) }
 
     describe '#all' do
       subject{ registry.all }
 
       it 'returns a list of activities' do
         subject.must_be_kind_of Array
-        subject.first.must_be_kind_of ActivitiesRegistry::Activity
+        subject.first.must_be_kind_of ActivityPermissionsRegistry::Activity
       end
     end
 
@@ -21,7 +21,7 @@ module ActivityPermissionEngine
       subject { registry.find_by_activity_ref(activity_ref) }
       describe 'using an existing activity_ref' do
         it 'return an Activity' do
-          subject.must_be_kind_of ActivitiesRegistry::Activity
+          subject.must_be_kind_of ActivityPermissionsRegistry::Activity
         end
 
         it 'returns the corresponding Activity' do
@@ -35,20 +35,6 @@ module ActivityPermissionEngine
         it 'returns false' do
           subject.must_equal false
         end
-      end
-    end
-
-    describe '#add' do
-      let(:registry) { Adapters::ActivitiesRegistry::Memory.new() }
-      subject { registry.add(activity_ref) }
-
-      it 'returns true when successfully added' do
-        subject.must_equal true
-      end
-
-      it 'add the activity ref to the registry' do
-        subject
-        registry.find_by_activity_ref(activity_ref).wont_equal false
       end
     end
 

@@ -1,22 +1,14 @@
-require_relative '../../activities_registry'
+require_relative '../../activity_permissions_registry'
 
 module ActivityPermissionEngine
   module Adapters
-    module ActivitiesRegistry
+    module ActivityPermissionsRegistry
       class Memory
-        include ActivityPermissionEngine::ActivitiesRegistry::Interface
+        include ActivityPermissionEngine::ActivityPermissionsRegistry::Interface
 
         def initialize(store = {})
           @store = store
-        end
-
-        def add(activity_ref)
-          if store.has_key?(activity_ref)
-            false
-          else
-            store[activity_ref] = []
-            true
-          end
+          @store.default = []
         end
 
         def del(activity_ref)
@@ -24,7 +16,11 @@ module ActivityPermissionEngine
         end
 
         def add_role(activity_ref, role_ref)
-          store[activity_ref] = store[activity_ref].push(role_ref)
+          store.has_key?(activity_ref) ? store[activity_ref].push(role_ref) : store[activity_ref] = [role_ref]
+        end
+
+        def remove_role(activity_ref, role_ref)
+          store[activity_ref] = store[activity_ref] - [role_ref]
         end
 
         private
