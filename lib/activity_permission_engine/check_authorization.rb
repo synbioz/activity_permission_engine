@@ -13,11 +13,11 @@ module ActivityPermissionEngine
     attr_reader(:request, :activities_registry)
 
     def activity
-      activities_registry.find_by_activity_ref(request.activity_ref)
+      @activity ||= activities_registry.find_by_activity_ref(request.activity_ref)
     end
 
     def authorized?
-      (activity.role_refs & request.role_refs).length > 0
+      activity && (activity.role_refs & request.role_refs).length > 0
     end
 
     class Request
