@@ -1,6 +1,11 @@
 # ActivityPermissionEngine
 
-TODO: Write a gem description
+This gem provide flexible tooling for managing application permissions
+
+It allow you to :
+
+* Set permissions on activities (strings) for some entities like roles.
+* Check for authorization
 
 ## Installation
 
@@ -20,7 +25,14 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Configure
+
+```ruby
+ActivityPermissionEngine.configure do |config|
+  config.activity_permissions_registry =  # Provide the persistence adapter from lib/adapters/activity_permissions/registry
+  config.activities = ['accounting:payments:register','accounting:accounts:read'] # The list of activities, can be provided at run time.
+end
+```
 
 ## Contributing
 
