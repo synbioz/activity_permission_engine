@@ -8,9 +8,9 @@ module ActivityPermissionEngine
         raise NotImplementedError
       end
 
-      # @return [Array(Activity)]
+      # @return [Array(ActivityPermission)]
       def all
-        get_all_activities.map { |activity| Activity.new(activity[:activity_ref], activity[:role_refs])}
+        get_all_activities.map { |activity| ActivityPermission.new(activity[:activity_ref], activity[:role_refs])}
       end
 
       # @param [String] activity_ref
@@ -27,10 +27,10 @@ module ActivityPermissionEngine
       end
 
       # @param [String] activity_ref
-      # @return [Activity] the found activity or false
+      # @return [ActivityPermission] the found activity or false
       def find_by_activity_ref(activity_ref)
         activity = get_activity_by_ref(activity_ref)
-        activity && Activity.new(activity[:activity_ref], activity[:role_refs])
+        activity && ActivityPermission.new(activity[:activity_ref], activity[:role_refs])
       end
 
       private
@@ -45,7 +45,7 @@ module ActivityPermissionEngine
       end
     end
 
-    class Activity
+    class ActivityPermission
       def initialize(activity_ref, role_refs)
         @activity_ref = activity_ref
         @role_refs = role_refs

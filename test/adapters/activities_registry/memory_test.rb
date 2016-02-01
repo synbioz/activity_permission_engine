@@ -1,19 +1,26 @@
 require_relative '../../test_helper'
 require_relative '../../../lib/activity_permission_engine/adapters/activity_permissions_registry/memory'
+require_relative '../../../test/interface_specifications/activity_permissions_registry_test'
 
 module ActivityPermissionEngine
   describe Adapters::ActivityPermissionsRegistry::Memory do
+
     let(:activity_ref) { 'example:activity_ref' }
     let(:role_refs) { %w(foo bar) }
     let(:store) { { activity_ref => role_refs} }
     let(:registry) { Adapters::ActivityPermissionsRegistry::Memory.new(store) }
+
+    describe 'implement the activity permission registry interface' do
+      subject { registry }
+      include ActivityPermissionEngine::ActivityPermissionsRegistryTest
+    end
 
     describe '#all' do
       subject{ registry.all }
 
       it 'returns a list of activities' do
         subject.must_be_kind_of Array
-        subject.first.must_be_kind_of ActivityPermissionsRegistry::Activity
+        subject.first.must_be_kind_of ActivityPermissionsRegistry::ActivityPermission
       end
     end
 
@@ -21,7 +28,7 @@ module ActivityPermissionEngine
       subject { registry.find_by_activity_ref(activity_ref) }
       describe 'using an existing activity_ref' do
         it 'return an Activity' do
-          subject.must_be_kind_of ActivityPermissionsRegistry::Activity
+          subject.must_be_kind_of ActivityPermissionsRegistry::ActivityPermission
         end
 
         it 'returns the corresponding Activity' do
