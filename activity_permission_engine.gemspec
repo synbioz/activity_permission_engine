@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = ActivityPermissionEngine::VERSION
   spec.authors       = ["Cedric Brancourt"]
   spec.email         = ["cedric.brancourt@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Simple library to manage permissions}
+  spec.description   = %q{Allow you to map roles to activities and to check for allowance}
   spec.homepage      = ""
   spec.license       = "MIT"
 
