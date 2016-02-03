@@ -1,6 +1,6 @@
 require_relative '../../test_helper'
 require_relative '../../../lib/activity_permission_engine/adapters/activity_permissions_registry/memory'
-require_relative '../../../test/interface_specifications/activity_permissions_registry_test'
+require_relative '../../../lib/activity_permission_engine/test_helpers/activity_permissions_registry_test'
 
 module ActivityPermissionEngine
   describe Adapters::ActivityPermissionsRegistry::Memory do
@@ -12,7 +12,7 @@ module ActivityPermissionEngine
 
     describe 'implement the activity permission registry interface' do
       subject { registry }
-      include ActivityPermissionEngine::ActivityPermissionsRegistryTest
+      include ActivityPermissionEngine::TestHelpers::ActivityPermissionsRegistryTest
     end
 
     describe '#all' do
