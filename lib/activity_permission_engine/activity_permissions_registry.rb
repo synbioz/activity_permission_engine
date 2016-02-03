@@ -1,5 +1,6 @@
 module ActivityPermissionEngine
   module ActivityPermissionsRegistry
+    # Include this module in adapters to provide expected behavior
     module Interface
 
       # @param [String] activity_ref
@@ -35,11 +36,12 @@ module ActivityPermissionEngine
 
       private
 
-      # @return [Array(Hash)]
+      # @return [Array(Hash{Symbol => String})]
       def get_all_activities
         raise NotImplementedError
       end
 
+      # @return [Hash{Symbol => String}] {activity_ref: '', role_refs: ''}
       def get_activity_by_ref(activity_ref)
         raise NotImplementedError
       end

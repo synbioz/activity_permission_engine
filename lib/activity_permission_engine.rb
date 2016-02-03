@@ -7,6 +7,7 @@ require_relative 'activity_permission_engine/disallow_activity'
 require_relative 'activity_permission_engine/check_authorization'
 require_relative 'activity_permission_engine/activities_registry'
 require_relative 'activity_permission_engine/adapters/activity_permissions_registry/memory'
+require_relative 'activity_permission_engine/list_activities_permissions'
 
 module ActivityPermissionEngine
   class << self
@@ -43,6 +44,10 @@ module ActivityPermissionEngine
 
   def self.check_authorization(request)
     CheckAuthorization.new(request, self.configuration.activity_permissions_registry).call
+  end
+
+  def self.list_activities_permissions
+    ListActivitiesPermissions.new(self.configuration.activity_permissions_registry).call
   end
 
   class Configuration

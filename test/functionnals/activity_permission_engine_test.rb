@@ -13,39 +13,65 @@ describe 'configured with a registry and a list of activities' do
     it 'return activity references list' do
       subject.activity_refs.must_equal provided_activities
     end
+
+    describe 'when i add activity at runtime' do
+      let(:new_activity) { 'new_activity' }
+      let(:request) { ActivityPermissionEngine::RegisterActivity::Request.new(new_activity) }
+
+      before(:each) do
+        ActivityPermissionEngine.register_activity(request)
+      end
+      it 'return the added activity' do
+        subject.activity_refs.must_include new_activity
+      end
+    end
   end
 
-  describe 'I can allow an entity ( like role ) to perform an activity' do
+  describe 'When I allow an entity ( like role ) to perform an activity' do
     let(:my_role) { 'roles manager' }
     let(:activity) { 'allow_role' }
-    let(:allow_activity_request) { ActivityPermissionEngine::AllowActivity::Request.new(activity,my_role) }
+    let(:allow_activity_request) { ActivityPermissionEngine::AllowActivity::Request.new(activity, my_role) }
 
     before(:each) { ActivityPermissionEngine.allow_activity(allow_activity_request) }
 
-    it 'allows the role to perform activity' do
-      ActivityPermissionEngine.check_authorization(
-          ActivityPermissionEngine::CheckAuthorization::Request.new(activity, [my_role])
-      ).authorized?.must_equal true
-    end
-  end
+    describe 'checking for authorization' do
+      it 'allows the role to perform activity' do
+        ActivityPermissionEngine.check_authorization(
+            ActivityPermissionEngine::CheckAuthorization::Request.new(activity, [my_role])
+        ).authorized?.must_equal true
+      end
 
-  describe 'I can disallow an entity to perform activity' do
-    let(:my_role) { 'roles manager' }
-    let(:activity) { 'allow_role' }
-    let(:disallow_activity_request) { ActivityPermissionEngine::DisallowActivity::Request.new(activity,[my_role]) }
-    let(:check_authorization_request) { ActivityPermissionEngine::CheckAuthorization::Request.new(activity, [my_role])}
+      describe 'the permission list' do
+        subject { ActivityPermissionEngine.list_activities_permissions.activities_permissions }
+        it 'includes the new permission' do
+          subject.select do
+          |ap|
+            ap.activity_ref == activity
+          end.first.role_refs.must_include my_role
+        end
+      end
 
-    before(:each) do
-      ActivityPermissionEngine.configuration = ActivityPermissionEngine::Configuration.new(
-        activity_permission_registry: ActivityPermissionEngine::Adapters::ActivityPermissionsRegistry::Memory.new(
-          {activity => [my_role]}
-        )
-      )
-    end
 
-    it 'disallow the role to perform activity' do
-      ActivityPermissionEngine.disallow_activity(disallow_activity_request)
-      ActivityPermissionEngine.check_authorization(check_authorization_request).authorized?.must_equal false
+      describe 'I can disallow an entity to perform activity' do
+        let(:my_role) { 'roles manager' }
+        let(:activity) { 'allow_role' }
+        let(:disallow_activity_request) { ActivityPermissionEngine::DisallowActivity::Request.new(activity, [my_role]) }
+        let(:check_authorization_request) { ActivityPermissionEngine::CheckAuthorization::Request.new(activity, [my_role]) }
+
+        before(:each) do
+          ActivityPermissionEngine.configuration = ActivityPermissionEngine::Configuration.new(
+              activity_permission_registry: ActivityPermissionEngine::Adapters::ActivityPermissionsRegistry::Memory.new(
+                  {activity => [my_role]}
+              )
+          )
+        end
+
+        it 'disallow the role to perform activity' do
+          ActivityPermissionEngine.disallow_activity(disallow_activity_request)
+          ActivityPermissionEngine.check_authorization(check_authorization_request).authorized?.must_equal false
+        end
+      end
     end
   end
 end
+
