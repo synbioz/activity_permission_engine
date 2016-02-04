@@ -1,15 +1,17 @@
 # ActivityPermissionEngine
 
-This gem provide flexible tooling for managing application permissions
+This gem provides flexible tooling for managing application permissions
 
-It allow you to :
+It allows you to:
 
 * Set permissions on activities (strings) for some entities like roles.
 * Check for authorization
 
-You can use it on it's own but, it will fit very well with [Pundit](https://github.com/elabs/pundit) or cancan
+You can use it on its own but, it will fit very well with [Pundit](https://github.com/elabs/pundit) or cancan
 
 ## Installation
+
+### Using Bundler
 
 Add this line to your application's Gemfile:
 
@@ -21,7 +23,7 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+### System-wide installation
 
     $ gem install activity_permission_engine
 
@@ -33,7 +35,7 @@ You need a persistence adapter. See [activity_permission_engine_redis](https://g
 
 ```ruby
 ActivityPermissionEngine.configure do |config|
-  config.activity_permissions_registry =  # Provide the persistence adapter choose from existing one around the web or create yours
+  config.activity_permissions_registry =  # Provide the persistence adapter choose from existing ones around the web or create yours
   config.activities = ['accounting:payments:register','accounting:accounts:read'] # Optional. The list of activities, can be provided at run time.
 end
 ```
@@ -41,12 +43,12 @@ end
 ### Roles refs and activities refs
 
 This library does not make assumptions upon roles except that they should be strings.
-But we recommend to use business role from the organization chart.
+We do recommend to use business role from the organization chart.
 
 eg : 'accounting:payment:register' may be allowed to 'accountant' and/or 'sales_executive'
-'person:update_profile' maybe to 'it_staff:administrator' 
+'person:update_profile' maybe to 'it_staff:administrator'
 
-But keep in mind to only use references ( not database id). References do not changes and are easy to translate in user readable value.
+But keep in mind to only use references (not database id). References do not changes and are easy to translate in user readable values.
 ( with I18n if you wish )
 
 
@@ -56,7 +58,7 @@ Activities are part of code and rely on code, they can not persist they are refr
 
 eg:  'accounting:payment:register' or 'person:update_profile'
 
-Activities can be provided at configuration time or run time. Up to you to choose / mix strategies.
+Activities can be provided at configuration time or run time. It's up to you to choose / mix strategies.
 
 At run time you may want to create helper method that register the activity once the file is required.
 At configuration time you'll likely maintain a file that contains all the activity refs.
@@ -90,11 +92,11 @@ ActivityPermissionEngine.list_activities
 ### Activity permissions
 
 Activities permissions are persisted ( if you set the correct adapter ).
-This data structure hold the role_ref allowed to perform an activity_ref
+This data structure holds the role_ref allowed to perform an activity_ref
 
 #### Allow role to perform activity
 
-To allow a role to perform an activity use 
+To allow a role to perform an activity use
 
 `ActivityPermissionEngine.allow_activity(#activity_ref, #role_ref)`
 
@@ -110,7 +112,7 @@ ActivityPermissionEngine.allow_activity(ActivityPermissionEngine::AllowActivity:
 
 #### Disallow role to perform activity
 
-To disallow a role to perform an activity use 
+To disallow a role to perform an activity use
 
 `ActivityPermissionEngine.disallow_activity(#activity_ref, #role_ref)`
 
@@ -123,13 +125,13 @@ ActivityPermissionEngine.disallow_activity(ActivityPermissionEngine::AllowActivi
 
 #### List existing permissions
 
-A permission exists once you allow a user to perform an activity.
+A permission exists once you allow a user to perform an activity.
 
-Use 
+Use
 
 `ActivityPermissionEngine.list_activities_permissions` to get a full list of existing activity permissions.
 
-It returns a Response object that respond to `#activities_permissions` and returns an Array of activities permissions. 
+It returns a Response object that respond to `#activities_permissions` and returns an Array of activities permissions.
 
 ```ruby
 request = ActivityPermissionEngine.list_activities_permissions
@@ -142,7 +144,7 @@ request.activities_permissions
 
 To check for authorization you will use `ActivityPermissionEngine.check_authorization(#activity_ref, #role_refs)`
 The request must respond to role_refs with an array, since most of the time a user can have many roles.
-It only need a single matching one to be authorized.
+It only needs a single matching one to be authorized.
 
 ```ruby
 response = ActivityPermissionEngine.check_authorization(ActivityPermissionEngine::CheckAuthorization::Request.new('accounting:payments:register',['accountant']))
@@ -156,8 +158,8 @@ response.authorized?
 You are free to not use the request objects like `ActivityPermissionEngine::AllowActivity::Request`
 You just need to supply an object that respond to the same methods like a struct.
 
-But I think it could be wise to use then in order to ensure API compliance and forward compatibility.
-By the way they are readonly data structure.
+But I think it could be wise to use it in order to ensure API compliance and forward compatibility.
+By the way they are readonly data structures.
 
 ## Contributing
 
