@@ -1,6 +1,6 @@
 module ActivityPermissionEngine
   class CheckAuthorization
-    def initialize(request, activities_registry)
+    def initialize(request, activities_registry = ActivityPermissionEngine.configuration.activity_permissions_registry)
       @request = request
       @activities_registry = activities_registry
     end
@@ -21,6 +21,8 @@ module ActivityPermissionEngine
     end
 
     class Request
+      include Framework::Request
+
       def initialize(activity_ref, role_refs)
         @activity_ref = activity_ref
         @role_refs = role_refs

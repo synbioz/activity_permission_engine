@@ -68,11 +68,11 @@ At configuration time you'll likely maintain a file that contains all the activi
 
 `ActivityPermissionEngine.register_activity(#activity_ref)`
 
-Given an object that respond to `#activity_ref` (You can use ActivityPermissionEngine::RegisterActivity::Request)
+Given an activity_ref
 It will add the activity_ref ( basically a string ) within the activities store.
 
 ```ruby
-ActivityPermissionEngine.register_activity(ActivityPermissionEngine::RegisterActivity::Request.new('accounting:payments:register'))
+ActivityPermissionEngine.register_activity('accounting:payments:register')
 #=> #<ActivityPermissionEngine::RegisterActivity::Response:0x0055c7cdc90f00 @success=true>
 ```
 
@@ -98,15 +98,14 @@ This data structure holds the role_ref allowed to perform an activity_ref
 
 To allow a role to perform an activity use
 
-`ActivityPermissionEngine.allow_activity(#activity_ref, #role_ref)`
+`ActivityPermissionEngine.allow_activity(activity_ref, role_ref)`
 
-Given an object that respond to `#activity_ref` and `#role_ref` (You can use ActivityPermissionEngine::AllowActivity::Request)
 
 ```ruby
-ActivityPermissionEngine.allow_activity(ActivityPermissionEngine::AllowActivity::Request.new('accounting:payments:register', 'accountant'))
+ActivityPermissionEngine.allow_activity('accounting:payments:register', 'accountant')
 #=> #<ActivityPermissionEngine::AllowActivity::Response:0x0055c7cdc63938 @success=["accountant"]>
 
-ActivityPermissionEngine.allow_activity(ActivityPermissionEngine::AllowActivity::Request.new('accounting:payments:register', 'sales:executives'))
+ActivityPermissionEngine.allow_activity('accounting:payments:register', 'sales:executives')
 #=> #<ActivityPermissionEngine::AllowActivity::Response:0x0055c7cdc42828 @success=["accountant", "sales:executives"]>
 ```
 
@@ -114,12 +113,10 @@ ActivityPermissionEngine.allow_activity(ActivityPermissionEngine::AllowActivity:
 
 To disallow a role to perform an activity use
 
-`ActivityPermissionEngine.disallow_activity(#activity_ref, #role_ref)`
-
-Given an object that respond to `#activity_ref` and `#role_ref` (You can use ActivityPermissionEngine::AllowActivity::Request)
+`ActivityPermissionEngine.disallow_activity(activity_ref, role_ref)`
 
 ```ruby
-ActivityPermissionEngine.disallow_activity(ActivityPermissionEngine::AllowActivity::Request.new('accounting:payments:register', 'sales:executives'))
+ActivityPermissionEngine.disallow_activity('accounting:payments:register', 'sales:executives')
 #=> #<ActivityPermissionEngine::DisallowActivity::Response:0x0055c7cdc10c88 @success=["accountant"]
 ```
 
@@ -134,9 +131,9 @@ Use
 It returns a Response object that respond to `#activities_permissions` and returns an Array of activities permissions.
 
 ```ruby
-request = ActivityPermissionEngine.list_activities_permissions
+response = ActivityPermissionEngine.list_activities_permissions
 #=> #<ActivityPermissionEngine::ListActivitiesPermissions::Response:0x0055c7cdbe4278 @activities_permissions=[#<ActivityPermissionEngine::ActivityPermissionsRegistry::ActivityPermission:0x0055c7cdbe42a0 @activity_ref="accounting:payments:register", @role_refs=["accountant"]>]>
-request.activities_permissions
+response.activities_permissions
 #=> [#<ActivityPermissionEngine::ActivityPermissionsRegistry::ActivityPermission:0x0055c7cdbe42a0 @activity_ref="accounting:payments:register", @role_refs=["accountant"]>]
 ```
 
@@ -147,7 +144,7 @@ The request must respond to role_refs with an array, since most of the time a us
 It only needs a single matching one to be authorized.
 
 ```ruby
-response = ActivityPermissionEngine.check_authorization(ActivityPermissionEngine::CheckAuthorization::Request.new('accounting:payments:register',['accountant']))
+response = ActivityPermissionEngine.check_authorization('accounting:payments:register',['accountant'])
 #=> #<ActivityPermissionEngine::CheckAuthorization::Response:0x0055c7cdb95600 @authorized=true>
 response.authorized?
 #=> true

@@ -16,10 +16,9 @@ describe 'configured with a registry and a list of activities' do
 
     describe 'when i add activity at runtime' do
       let(:new_activity) { 'new_activity' }
-      let(:request) { ActivityPermissionEngine::RegisterActivity::Request.new(new_activity) }
 
       before(:each) do
-        ActivityPermissionEngine.register_activity(request)
+        ActivityPermissionEngine.register_activity(new_activity)
       end
       it 'return the added activity' do
         subject.activity_refs.must_include new_activity
@@ -32,13 +31,11 @@ describe 'configured with a registry and a list of activities' do
     let(:activity) { 'allow_role' }
     let(:allow_activity_request) { ActivityPermissionEngine::AllowActivity::Request.new(activity, my_role) }
 
-    before(:each) { ActivityPermissionEngine.allow_activity(allow_activity_request) }
+    before(:each) { ActivityPermissionEngine.allow_activity(activity, my_role) }
 
     describe 'checking for authorization' do
       it 'allows the role to perform activity' do
-        ActivityPermissionEngine.check_authorization(
-            ActivityPermissionEngine::CheckAuthorization::Request.new(activity, [my_role])
-        ).authorized?.must_equal true
+        ActivityPermissionEngine.check_authorization(activity, [my_role]).authorized?.must_equal true
       end
 
       describe 'the permission list' do
@@ -67,8 +64,8 @@ describe 'configured with a registry and a list of activities' do
         end
 
         it 'disallow the role to perform activity' do
-          ActivityPermissionEngine.disallow_activity(disallow_activity_request)
-          ActivityPermissionEngine.check_authorization(check_authorization_request).authorized?.must_equal false
+          ActivityPermissionEngine.disallow_activity(my_role, activity)
+          ActivityPermissionEngine.check_authorization(activity, [my_role]).authorized?.must_equal false
         end
       end
     end

@@ -1,18 +1,11 @@
 require_relative '../test_helper'
 
 module ActivityPermissionEngine
-  describe 'ActivityPermissionEngine.register_activity(RegisterActivity::Request)' do
+  describe 'ActivityPermissionEngine.register_activity(activity_ref)' do
     let(:activity_ref) { 'activity_ref' }
-    let(:request) { RegisterActivity::Request.new(activity_ref) }
     let(:succeed) { true }
 
-    subject { ActivityPermissionEngine.register_activity(request) }
-
-    describe 'RegisterActivity::Request#new(activity_ref)' do
-      it 'require activity_ref string as parameter' do
-        -> {RegisterActivity::Request.new}.must_raise ArgumentError
-      end
-    end
+    subject { ActivityPermissionEngine.register_activity(activity_ref) }
 
     it 'returns RegisterActivity::Response' do
       subject.must_be_kind_of RegisterActivity::Response
@@ -35,6 +28,12 @@ module ActivityPermissionEngine
           end
         end
       end
+    end
+  end
+
+  describe 'RegisterActivity::Request#new(activity_ref)' do
+    it 'require activity_ref string as parameter' do
+      -> {RegisterActivity::Request.new}.must_raise ArgumentError
     end
   end
 end

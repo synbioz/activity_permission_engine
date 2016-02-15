@@ -6,7 +6,6 @@ module ActivityPermissionEngine
     let(:user_role_refs) { ['baz','buzz'] }
     let(:role_refs) { ['foo', 'bar'] }
     let(:activity_permissions_registry) { Minitest::Mock.new.expect(:find_by_activity_ref, activity, [activity_ref]) }
-    let(:request) { CheckAuthorization::Request.new(activity_ref, user_role_refs) }
     let(:activity) { Minitest::Mock.new }
 
     before(:each) do
@@ -15,15 +14,7 @@ module ActivityPermissionEngine
       ActivityPermissionEngine.configuration.activity_permissions_registry = activity_permissions_registry
     end
 
-    subject { ActivityPermissionEngine.check_authorization(request) }
-
-    describe 'it require a  CheckAuthorization::Request as parameter' do
-      describe 'CheckAuthorization::Request.new(activity_ref,role_refs)' do
-        it 'require an activity_ref string and role_refs array' do
-          lambda { CheckAuthorization::Request.new('') }.must_raise ArgumentError
-        end
-      end
-    end
+    subject { ActivityPermissionEngine.check_authorization(activity_ref, user_role_refs) }
 
     it 'return CheckAuthorization::Response' do
       subject.must_be_kind_of CheckAuthorization::Response
@@ -41,6 +32,14 @@ module ActivityPermissionEngine
       describe 'CheckAuthorization::Response#authorized?' do
         it 'returns true' do
           subject.authorized?.must_equal true
+        end
+      end
+    end
+
+    describe 'it require a  CheckAuthorization::Request as parameter' do
+      describe 'CheckAuthorization::Request.new(activity_ref,role_refs)' do
+        it 'require an activity_ref string and role_refs array' do
+          lambda { CheckAuthorization::Request.new('') }.must_raise ArgumentError
         end
       end
     end

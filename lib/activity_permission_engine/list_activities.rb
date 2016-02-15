@@ -1,6 +1,7 @@
 module ActivityPermissionEngine
   class ListActivities
-    def initialize(activities_registry)
+    def initialize(request, activities_registry = ActivityPermissionEngine.configuration.activities_registry)
+      @request = request
       @activities_registry = activities_registry
     end
 
@@ -10,6 +11,10 @@ module ActivityPermissionEngine
 
     private
     attr_reader(:activities_registry)
+
+    class Request
+      include Framework::Request
+    end
 
     class Response
       def initialize(activity_refs)

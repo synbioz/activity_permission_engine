@@ -1,22 +1,15 @@
 require_relative '../test_helper'
 
 module ActivityPermissionEngine
-  describe 'ActivityPermissionEngine.unregister_activity(UnregisterActivity::Request)' do
+  describe 'ActivityPermissionEngine.unregister_activity(activity_ref)' do
     let(:activity_ref) { 'foo' }
     let(:succeed) { true }
     let(:activity_permissions_registry) { Minitest::Mock.new.expect(:del, succeed, [activity_ref]) }
-    let(:request) { UnregisterActivity::Request.new(activity_ref) }
 
-    subject { ActivityPermissionEngine.unregister_activity(request) }
+    subject { ActivityPermissionEngine.unregister_activity(activity_ref) }
 
     before(:each) do
       ActivityPermissionEngine.configuration.activity_permissions_registry = activity_permissions_registry
-    end
-
-    describe 'UnregisterActivity::Request#new(activity_ref)' do
-      it 'require activity_ref string as parameter' do
-        -> { UnregisterActivity::Request.new }.must_raise ArgumentError
-      end
     end
 
     it 'returns UnregisterActivity::Response' do
@@ -37,6 +30,12 @@ module ActivityPermissionEngine
         it 'returns false' do
           subject.success?.must_equal false
         end
+      end
+    end
+
+    describe 'UnregisterActivity::Request#new(activity_ref)' do
+      it 'require activity_ref string as parameter' do
+        -> { UnregisterActivity::Request.new }.must_raise ArgumentError
       end
     end
   end

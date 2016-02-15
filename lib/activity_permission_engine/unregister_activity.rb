@@ -1,6 +1,6 @@
 module ActivityPermissionEngine
   class UnregisterActivity
-    def initialize(request, activities_registry)
+    def initialize(request, activities_registry = ActivityPermissionEngine.configuration.activity_permissions_registry)
       @request = request
       @activities_registry = activities_registry
     end
@@ -13,6 +13,8 @@ module ActivityPermissionEngine
     attr_reader(:request, :activities_registry)
 
     class Request
+      include Framework::Request
+
       def initialize(activity_ref)
         @activity_ref = activity_ref
       end

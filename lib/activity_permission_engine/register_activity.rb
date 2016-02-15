@@ -1,6 +1,6 @@
 module ActivityPermissionEngine
   class RegisterActivity
-    def initialize(request, activity_registry)
+    def initialize(request, activity_registry = ActivityPermissionEngine.configuration.activities_registry)
       @request = request
       @activity_registry = activity_registry
     end
@@ -13,6 +13,8 @@ module ActivityPermissionEngine
     attr_reader(:request, :activity_registry)
 
     class Request
+      include Framework::Request
+
       def initialize(activity_ref)
         @activity_ref = activity_ref
       end
