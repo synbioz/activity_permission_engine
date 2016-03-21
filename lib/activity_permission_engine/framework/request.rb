@@ -1,17 +1,15 @@
 module ActivityPermissionEngine
   module Framework
     module Request
-      def self.included(base_class)
-        base_class.class_eval do
-          private
-          def perform
-            self.class.parent.new(self).call
-          end
-        end
-      end
-
       def response
         perform
+      end
+
+      private
+      def perform
+        self.class.name.split('::').reverse.drop(1).reverse.inject(Object) do |nesting, name|
+          nesting.const_get(name)
+        end.new(self).call
       end
     end
   end
