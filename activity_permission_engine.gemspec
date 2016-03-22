@@ -6,11 +6,11 @@ require 'activity_permission_engine/version'
 Gem::Specification.new do |spec|
   spec.name          = "activity_permission_engine"
   spec.version       = ActivityPermissionEngine::VERSION
-  spec.authors       = ["Cedric Brancourt"]
-  spec.email         = ["cedric.brancourt@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.authors       = ["Cedric Brancourt", "Synbioz"]
+  spec.email         = ["cedric.brancourt@gmail.com", "opensource@synbioz.com"]
+  spec.summary       = %q{Simple library to manage permissions}
+  spec.description   = %q{Allow you to map roles to activities and to check for allowance}
+  spec.homepage      = "https://github.com/synbioz/activity_permission_engine"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -20,4 +20,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "minitest", "~> 5.8"
+  spec.add_development_dependency "simplecov"
 end
