@@ -1,5 +1,7 @@
 # ActivityPermissionEngine
 
+[![Join the chat at https://gitter.im/synbioz/activity_permission_engine](https://badges.gitter.im/synbioz/activity_permission_engine.svg)](https://gitter.im/synbioz/activity_permission_engine?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This gem provides flexible tooling for managing application permissions
 
 It allows you to:
